@@ -5,12 +5,7 @@ const editBookByIdHandler = (request, h) => {
 
 	const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
 
-	/** Check Error for :
-	 *  * name is empty/null/undefined
-	 *  * readPage greater than pageCount
-	 **/
-
-	if (!name) {
+	if (name === undefined) {
 		const response = h.response({
 			status: "fail",
 			message: "Gagal memperbarui buku. Mohon isi nama buku",

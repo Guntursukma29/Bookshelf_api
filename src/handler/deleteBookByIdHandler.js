@@ -1,12 +1,12 @@
-const booksModule = require("../books");
+const books = require("../books");
 
 const deleteBookByIdHandler = (request, h) => {
 	const { id } = request.params;
 
-	const index = booksModule.findIndex((book) => book.id === id);
+	const index = books.findIndex((book) => book.id === id);
 
 	if (index !== -1) {
-		booksModule.splice(index, 1);
+		books.splice(index, 1);
 		const response = h.response({
 			status: "success",
 			message: "Buku berhasil dihapus",

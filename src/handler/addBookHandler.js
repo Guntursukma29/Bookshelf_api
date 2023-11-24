@@ -1,20 +1,15 @@
-const nanoidModule = require("nanoid");
-const booksModule = require("../books");
+const { nanoid } = require("nanoid");
+const books = require("../books");
 
 const addBookHandler = (request, h) => {
 	const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
 
-	const id = nanoidModule.nanoid(16);
+	const id = nanoid(16);
 	const insertedAt = new Date().toISOString();
 	const updatedAt = insertedAt;
-	let finished = false;
+	const finished = pageCount === readPage;
 
-	/** Check Error for :
-	 *  * name is empty/null/undefined
-	 *  * readPage greater than pageCount
-	 **/
-
-	if (!name) {
+	if (name === undefined) {
 		const response = h.response({
 			status: "fail",
 			message: "Gagal menambahkan buku. Mohon isi nama buku",
@@ -32,12 +27,6 @@ const addBookHandler = (request, h) => {
 		return response;
 	}
 
-	if (pageCount === readPage) {
-		finished = true;
-	} else {
-		finished = false;
-	}
-
 	const newbook = {
 		id,
 		name,
@@ -53,9 +42,9 @@ const addBookHandler = (request, h) => {
 		updatedAt,
 	};
 
-	booksModule.push(newbook);
+	books.push(newbook);
 
-	const isSuccess = booksModule.filter((book) => book.id === id).length > 0;
+	const isSuccess = books.filter((book) => book.id === id).length > 0;
 
 	if (isSuccess) {
 		const response = h.response({

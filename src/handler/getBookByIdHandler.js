@@ -1,9 +1,11 @@
-const books = require("../books");
+const booksModule = require("../books");
 
 const getBookByIdHandler = (request, h) => {
 	const { id } = request.params;
-	const book = books.filter((b) => b.id === id)[0];
-	if (book !== undefined) {
+
+	const book = booksModule.filter((book) => book.id === id)[0];
+
+	if (book) {
 		return {
 			status: "success",
 			data: {

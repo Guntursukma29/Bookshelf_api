@@ -1,15 +1,15 @@
-const { nanoid } = require("nanoid");
-const books = require("../books");
+const nanoidModule = require("nanoid");
+const booksModule = require("../books");
 
 const addBookHandler = (request, h) => {
 	const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
 
-	const id = nanoid(16);
+	const id = nanoidModule.nanoid(16);
 	const insertedAt = new Date().toISOString();
 	const updatedAt = insertedAt;
-	const finished = pageCount === readPage;
+	let finished = false;
 
-	if (name === undefined) {
+	if (!name) {
 		const response = h.response({
 			status: "fail",
 			message: "Gagal menambahkan buku. Mohon isi nama buku",
@@ -27,6 +27,12 @@ const addBookHandler = (request, h) => {
 		return response;
 	}
 
+	if (pageCount === readPage) {
+		finished = true;
+	} else {
+		finished = false;
+	}
+
 	const newbook = {
 		id,
 		name,
@@ -42,9 +48,9 @@ const addBookHandler = (request, h) => {
 		updatedAt,
 	};
 
-	books.push(newbook);
+	booksModule.push(newbook);
 
-	const isSuccess = books.filter((book) => book.id === id).length > 0;
+	const isSuccess = booksModule.filter((book) => book.id === id).length > 0;
 
 	if (isSuccess) {
 		const response = h.response({
